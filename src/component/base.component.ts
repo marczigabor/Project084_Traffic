@@ -1,5 +1,5 @@
 import { EventEmitter } from "../service/event-emitter.service";
-import { IComponent } from "./icomponent";
+import { IComponent } from "./interface/icomponent";
 
 export abstract class BaseComponent implements IComponent {
     

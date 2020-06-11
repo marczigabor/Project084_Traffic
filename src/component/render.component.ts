@@ -1,5 +1,8 @@
 import { BaseComponent } from "./base.component";
 import { Graph } from "../model/graph.model";
+import { Car } from "../model/car.model";
+import { GraphComponent } from "./visualisation/graph.component";
+import { CarComponent } from "./visualisation/car.component";
 
 export class RenderComponent extends BaseComponent {
     
@@ -22,7 +25,7 @@ export class RenderComponent extends BaseComponent {
         this.context = this.canvas.getContext('2d');
     }
 
-    public draw = (timeStamp: number, graph: Graph): void => {
+    public draw = (timeStamp: number, graphComponent: GraphComponent, carComponent: CarComponent): void => {
 
         // Calculate the number of seconds passed since the last frame
         const secondsPassed = (timeStamp - this.oldTimeStamp) / 1000;
@@ -31,8 +34,10 @@ export class RenderComponent extends BaseComponent {
         // Calculate fps
         this.fps = Math.round(1 / secondsPassed);
     
-        this.drawGraph(graph);
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        graphComponent.render(this.context);
+        carComponent.render(this.context);
     }
 
     private drawGraph = (graph: Graph): void => {
@@ -41,43 +46,8 @@ export class RenderComponent extends BaseComponent {
 
         if (graph) {
 
-            // nodes
-            this.context.strokeStyle = 'blue';
-            this.context.lineWidth = 1;
-            if (graph.nodes && Array.isArray(graph.nodes) ) {
-                graph.nodes.forEach(node => {
-                    if (node.selected) {
-                        this.context.fillStyle = 'orange';
-                        this.context.beginPath();
-                        this.context.fillRect(node.x - (node.width / 2), node.y - (node.height/2), node.width, node.height);
-                        this.context.closePath();
-                    } else {
-                        this.context.beginPath();
-                        this.context.rect(node.x - (node.width / 2), node.y - (node.height/2), node.width, node.height);
-                        this.context.stroke();                    
-                        this.context.closePath();
-                    }
-                });
-            }
-
-            // edges
-            if (graph.edges && Array.isArray(graph.edges) ) {
-                graph.edges.forEach(edge => {
-
-                    this.context.strokeStyle = 'blue';
-
-                    this.context.beginPath();
-                    this.context.moveTo(edge.startNode.x, edge.startNode.y);
-                    this.context.lineTo(edge.endNode.x, edge.endNode.y);
-                    this.context.lineWidth = 1;
-                    this.context.stroke();                    
-              
-                    // set line color
-                    this.context.closePath();
-                    
-                });
-            }
-            
+            graph.render(this.context);
+           
         }
 
     }
