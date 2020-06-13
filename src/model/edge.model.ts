@@ -23,7 +23,18 @@ export class Edge implements IRendering {
         return this._endNode;
     }
 
-    render(context: CanvasRenderingContext2D): void {
+    public getEndNode(startNode: Node): Node {
+        
+        if (this._endNode === startNode) {
+            return this.startNode;
+        } else if (this._startNode === startNode) {
+            return this.endNode;
+        } else {
+            return null;
+        }
+    }
+
+    public render(context: CanvasRenderingContext2D): void {
 
         context.strokeStyle = 'blue';
 

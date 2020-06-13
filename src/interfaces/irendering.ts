@@ -1,5 +1,5 @@
 export interface IRendering {
 
-    render(context: CanvasRenderingContext2D): void;
+    render(context: CanvasRenderingContext2D, fps: number): void;
 
 }

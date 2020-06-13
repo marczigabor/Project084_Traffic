@@ -1,14 +1,9 @@
 import { BaseComponent } from "./base.component";
 import { EventEmitterConstant } from "../constant/event-emitter.constant";
 import { Point } from "../model/point.model";
+import { EventService } from "../service/event.service";
 
 export class InputComponent extends BaseComponent {
-    
-    destroy(): void {
-        super.destroy();
-        this.canvas.removeEventListener("click", this.clickListener);
-        document.removeEventListener("keydown", this.keydownListener);
-    }
     
     private readonly canvas: HTMLCanvasElement;
 
@@ -18,16 +13,26 @@ export class InputComponent extends BaseComponent {
         this.addEventListeners();
     }
 
+    destroy(): void {
+        this.canvas.removeEventListener("click", this.clickListener);
+        document.removeEventListener("keydown", this.keydownListener);
+    }
+
     private clickListener = (ev: MouseEvent): void => {
         const x = ev.clientX - this.canvas.offsetLeft;
         const y = ev.clientY - this.canvas.offsetTop;
-        BaseComponent.eventEmitter.emit(EventEmitterConstant.canvasClick, new Point(x, y));
+        EventService.eventEmitter.emit(EventEmitterConstant.canvasClick, new Point(x, y));
     };
 
-    private keydownListener(ev: KeyboardEvent) {
+    private keydownListener = (ev: KeyboardEvent) => {
         // add auto
-        if(ev.key === 'a') {
-            BaseComponent.eventEmitter.emit(EventEmitterConstant.addCar, null);
+        switch (ev.key) {
+            case 'a':  // add a new car
+                EventService.eventEmitter.emit(EventEmitterConstant.addCar, null);
+                break;
+            case 's':  // hide nodes and edges
+                EventService.eventEmitter.emit(EventEmitterConstant.edgesNodesVisibility, null);
+                break;
         }
     }
 

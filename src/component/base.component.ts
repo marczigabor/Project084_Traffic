@@ -1,21 +1,11 @@
 import { EventEmitter } from "../service/event-emitter.service";
 import { IComponent } from "./interface/icomponent";
 
-export abstract class BaseComponent implements IComponent {
-    
-    protected subscribes: Array<() => void>;
+export abstract class BaseComponent {
 
-    protected static eventEmitter: EventEmitter = new EventEmitter();
+    public abstract destroy(): void;
 
-    public destroy(): void {
-        this.subscribes.forEach( subscription => subscription());
-    }
-
-    /**
-     *
-     */
     constructor() {
-        this.subscribes = [];
     }
 
 }

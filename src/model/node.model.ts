@@ -1,5 +1,6 @@
 import { IRendering } from "../interfaces/irendering";
 import { Point } from "./point.model";
+import { Edge } from "./edge.model";
 
 export class Node implements IRendering {
 
@@ -9,6 +10,7 @@ export class Node implements IRendering {
     private readonly _height: number;
     private _selected: boolean;
     private _position: Point;
+    private _edges: Edge[];
 
     constructor(    
         id: string,
@@ -21,6 +23,7 @@ export class Node implements IRendering {
         this._position = new Point(x, y);
         this._width = 20;
         this._height = 20;
+        this._edges = [];
     }
 
     public set selected(value: boolean) {
@@ -41,6 +44,10 @@ export class Node implements IRendering {
 
     public get height(): number {
         return this._height;
+    }
+
+    public get edges(): Edge[] {
+        return this._edges;
     }
 
     render(context: CanvasRenderingContext2D): void {

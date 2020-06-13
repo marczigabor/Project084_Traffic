@@ -4,14 +4,20 @@ import { Node } from "../../model/node.model";
 import { Edge } from "../../model/edge.model";
 import { IRendering } from "../../interfaces/irendering";
 import { VisualisationBaseComponent } from "./visualisation-base.component";
+import { EventEmitterConstant } from "../../constant/event-emitter.constant";
+import { EventService } from "../../service/event.service";
 
 export class GraphComponent extends VisualisationBaseComponent {
 
-    private readonly _graph: Graph;
+    private _graph: Graph;
 
     constructor() {
         super();
         this._graph = new Graph();
+        this.subscribe();
+    }
+
+    public destroy(): void {
     }
 
     public get graph(): Graph {
@@ -53,12 +59,15 @@ export class GraphComponent extends VisualisationBaseComponent {
     public addEdge = (startNode: Node, endNode: Node): void => {
         if (this._graph.edges) {
             if (!this._graph.edges.find((storedEdge) => storedEdge.startNode === startNode && storedEdge.endNode === endNode)) {
-                this._graph.edges.push(new Edge(startNode, endNode));
+                const edge = new Edge(startNode, endNode);
+                this._graph.edges.push(edge);
+                startNode.edges.push(edge);
+                endNode.edges.push(edge);
             }  
         }
     }
 
-    public render(context: CanvasRenderingContext2D): void {
+    public render(context: CanvasRenderingContext2D, fps: number): void {
         this._graph.render(context);
     }
 
@@ -66,4 +75,11 @@ export class GraphComponent extends VisualisationBaseComponent {
         return this._graph.nodes.filter((node) => node.selected);         
     }
 
+    private subscribe(): void {
+        EventService.eventEmitter.on(EventEmitterConstant.edgesNodesVisibility, this.edgesNodesVisibilityListener);
+    }
+
+    private edgesNodesVisibilityListener = (data: any): void => {
+        this._graph.setVisibility();
+    }
 }

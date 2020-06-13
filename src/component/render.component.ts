@@ -6,8 +6,8 @@ import { CarComponent } from "./visualisation/car.component";
 
 export class RenderComponent extends BaseComponent {
     
-    private oldTimeStamp: number;
-    private fps: number;
+    private _oldTimeStamp: number;
+    private _fps: number;
 
     destroy(): void {
     }
@@ -28,16 +28,16 @@ export class RenderComponent extends BaseComponent {
     public draw = (timeStamp: number, graphComponent: GraphComponent, carComponent: CarComponent): void => {
 
         // Calculate the number of seconds passed since the last frame
-        const secondsPassed = (timeStamp - this.oldTimeStamp) / 1000;
-        this.oldTimeStamp = timeStamp;
+        const secondsPassed = (timeStamp - this._oldTimeStamp) / 1000;
+        this._oldTimeStamp = timeStamp;
     
         // Calculate fps
-        this.fps = Math.round(1 / secondsPassed);
+        this._fps = Math.round(1 / secondsPassed);
     
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        graphComponent.render(this.context);
-        carComponent.render(this.context);
+        graphComponent.render(this.context, this._fps);
+        carComponent.render(this.context, this._fps);
     }
 
     private drawGraph = (graph: Graph): void => {
