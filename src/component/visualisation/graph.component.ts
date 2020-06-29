@@ -27,8 +27,8 @@ export class GraphComponent extends VisualisationBaseComponent {
     public handleClick = (x: number, y: number): void =>  {
 
         const node = this._graph.nodes.find((storedNode) => 
-        storedNode.position.x - (storedNode.width/2) <= x && storedNode.position.x + (storedNode.width/2) >= x && 
-        storedNode.position.y - (storedNode.height/2) <= y && storedNode.position.y + (storedNode.height/2) >= y);
+        storedNode.position.x - (storedNode.radius) <= x && storedNode.position.x + (storedNode.radius) >= x && 
+        storedNode.position.y - (storedNode.radius) <= y && storedNode.position.y + (storedNode.radius) >= y);
 
         if (node) {
             node.selected = !node.selected;

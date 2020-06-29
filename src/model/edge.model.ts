@@ -43,8 +43,6 @@ export class Edge implements IRendering {
         context.lineTo(this.endNode.position.x, this.endNode.position.y);
         context.lineWidth = 1;
         context.stroke();                    
-  
-        // set line color
         context.closePath();
 
     }

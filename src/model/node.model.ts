@@ -6,11 +6,10 @@ export class Node implements IRendering {
 
     private readonly _id: string;
     private readonly _label: string;
-    private readonly _width: number;
-    private readonly _height: number;
     private _selected: boolean;
     private _position: Point;
     private _edges: Edge[];
+    private readonly _radius: number;
 
     constructor(    
         id: string,
@@ -21,8 +20,7 @@ export class Node implements IRendering {
         this._id = id;
         this._label = label;
         this._position = new Point(x, y);
-        this._width = 20;
-        this._height = 20;
+        this._radius = 10;
         this._edges = [];
     }
 
@@ -38,13 +36,13 @@ export class Node implements IRendering {
         return this._position;
     }
 
-    public get width(): number {
-        return this._width;
+    public get radius(): number {
+        return this._radius;
     }
 
-    public get height(): number {
-        return this._height;
-    }
+    // public get height(): number {
+    //     return this._height;
+    // }
 
     public get edges(): Edge[] {
         return this._edges;
@@ -54,15 +52,13 @@ export class Node implements IRendering {
 
         if (this._selected) {
             context.fillStyle = 'orange';
-            context.beginPath();
-            context.fillRect(this._position.x - (this._width / 2), this._position.y - (this._height/2), this._width, this._height);
-            context.closePath();
         } else {
-            context.beginPath();
-            context.rect(this._position.x - (this._width / 2), this._position.y - (this._height/2), this._width, this._height);
-            context.stroke();                    
-            context.closePath();
+            context.fillStyle = 'blue';
         }
 
+        context.beginPath();
+        context.arc(this._position.x, this._position.y, this._radius, 0, 2 * Math.PI);
+        context.fill();    
+        context.closePath();
     }
 }
